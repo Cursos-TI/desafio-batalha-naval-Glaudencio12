@@ -4,11 +4,58 @@
 // Este código inicial serve como base para o desenvolvimento do sistema de Batalha Naval.
 // Siga os comentários para implementar cada parte do desafio.
 
-int main() {
+int main()
+{
     // Nível Novato - Posicionamento dos Navios
-    // Sugestão: Declare uma matriz bidimensional para representar o tabuleiro (Ex: int tabuleiro[5][5];).
-    // Sugestão: Posicione dois navios no tabuleiro, um verticalmente e outro horizontalmente.
-    // Sugestão: Utilize `printf` para exibir as coordenadas de cada parte dos navios.
+    // Declaração da matriz 10x10 que irá representar o tabuleiro
+    int tabuleiro[10][10];
+
+    // Declaração do vetores que representam os dois navios
+    int navio1[3] = {3, 3, 3};
+    int navio2[3] = {3, 3, 3};
+
+    // Declaração do vetor que será utilizado como referêcia de coluna no tabuleiro
+    char letras[11] = {' ','A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
+    // Declaração do vetor que será utilizado como referêcia de linha no tabuleiro
+    int linhas[10] =  {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    
+    // Implementando a matriz com números zeros para representar a água.
+    for (int i = 0; i < 10; i++){
+        for (int j = 0; j < 10; j++){
+            tabuleiro[i][j] = 0; 
+        }
+    }
+
+    // Posicionamento do navio1 no tabuleiro horizontalmente.
+    int linhaNavio1 = 6;
+    int colunaNavio1 = 3;
+    for (int i = 0; i < 3; i++){                                          
+        tabuleiro[linhaNavio1][colunaNavio1 + i] = navio1[i]; // Posiciona horizontalmente
+    }
+
+     // Posicionamento do navio2 no tabuleiro verticalmente.
+     int linhaNavio2 = 2;
+     int colunaNavio2 = 3;
+     for (int i = 0; i < 3; i++){                                          
+        tabuleiro[linhaNavio2 + i][colunaNavio2] = navio2[i]; // Posiciona verticalmente
+     }
+
+    // Emprimindo as letras para fácil identifcação das colunas
+    printf("\n======TABULEIRO BATALHA NAVAL======\n");
+    for (int i = 0; i < 11; i++){
+        printf("%c  ", letras[i]);
+    }
+    printf("\n");
+    
+    // Imprimindo o tabuleiro no console
+    for (int i = 0; i < 10; i++){
+        printf("%d | ", linhas[i]); //Emprime números em cada linha para fácil a indentificação
+        for (int j = 0; j < 10; j++){
+            printf("%d  ", tabuleiro[i][j]);
+        }
+        printf("\n");
+    }
+
 
     // Nível Aventureiro - Expansão do Tabuleiro e Posicionamento Diagonal
     // Sugestão: Expanda o tabuleiro para uma matriz 10x10.
@@ -25,7 +72,7 @@ int main() {
     // 0 0 1 0 0
     // 0 1 1 1 0
     // 1 1 1 1 1
-    
+
     // Exemplo para habilidade em octaedro:
     // 0 0 1 0 0
     // 0 1 1 1 0
