@@ -2,17 +2,86 @@
 
 // Desafio Batalha Naval - MateCheck
 // Este código inicial serve como base para o desenvolvimento do sistema de Batalha Naval.
-// Siga os comentários para implementar cada parte do desafio.
+// Siga os comentários para implementar cada parte do desafio
 
-int main()
-{
-    // Nível Novato - Posicionamento dos Navios
-    // Declaração da matriz 10x10 que irá representar o tabuleiro
-    int tabuleiro[10][10];
-
+void posicionarNavios(int tabuleiro[10][10]){
     // Declaração do vetores que representam os dois navios
     int navio1[3] = {3, 3, 3};
     int navio2[3] = {3, 3, 3};
+    int navio3[3] = {3, 3, 3};
+    int navio4[3] = {3, 3, 3};
+
+    // Posicionamento inicial dos navios
+    int linhaNavio1 = 8, colunaNavio1 = 7; // Horizontal (---)
+    int linhaNavio2 = 2, colunaNavio2 = 2; // Vertical (|)
+    int linhaNavio3 = 0, colunaNavio3 = 4; // Diagonal crescente (\)
+    int linhaNavio4 = 7, colunaNavio4 = 4; // Diagonal decrescente (/)
+
+    int sobreposicao = 0;
+
+    // Verifica sobreposição considerando todo o espaço ocupado pelos navios
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            if ((linhaNavio1 == linhaNavio2) && (colunaNavio1 == colunaNavio2) || (linhaNavio3 == linhaNavio4) && (colunaNavio3 == colunaNavio4)) {
+                printf("Os navios estão sobrepondo-se! Modifique as coordenadas\n");
+                sobreposicao = 1;
+                break;
+            }
+        }
+        if (sobreposicao){
+            break;
+        } 
+    }
+
+    // Se não houver sobreposição, posiciona os navios
+    if (!sobreposicao) {
+        // Posiciona horizontalmente (----) (navio1)
+        if (colunaNavio1 + 2 < 10){
+            printf("===Coordenadas das partes do navio1===\n");
+            for (int i = 0; i < 3; i++) {
+                int coordenadaColuna = colunaNavio1 + i; //Armazena a coordenada das partes do barco nas colunas da matriz
+                tabuleiro[linhaNavio1][coordenadaColuna] = navio1[i]; // Posiciona o navio1 horizontalmente
+                printf("Coordenadas: linha = %d - Coluna = %d\n", linhaNavio1, coordenadaColuna); //Imprime as coordenadas da matriz
+            }
+        }
+        
+        // Posiciona verticalmente (|) (navio2)
+        if (linhaNavio2 + 2 < 10){
+            printf("\n===Coordenadas das partes do navio2===\n");
+            for (int i = 0; i < 3; i++) {
+                int coordenadaLinha = linhaNavio2 + i; //Armazena a coordenada das partes do barco nas linhas da matriz
+                tabuleiro[coordenadaLinha][colunaNavio2] = navio2[i]; //Posiciona o navio2 verticalmente
+                printf("Coordenadas: linha = %d - Coluna = %d\n", coordenadaLinha, colunaNavio2); //Imprime as coordenadas da matriz
+            }
+        }
+       
+        // Posicionamento diagonal crescente (\) (navio3)
+        if (linhaNavio3 + 2 < 10 && colunaNavio3 + 2 < 10) {
+            printf("\n===Coordenadas das partes do navio3===\n");
+            for (int i = 0; i < 3; i++) {
+                int coordenadaLinha = linhaNavio3 + i; //Armazena a coordenada das partes do barco nas linhas da matriz
+                int coordanadaColuna = colunaNavio3 + i; //Armazena a coordenada das partes do barco nas colunas da matriz
+                tabuleiro[coordenadaLinha][coordanadaColuna] = navio3[i]; //Posiciona o navio3 na diagonal crescente
+                printf("Coordenadas: linha = %d - Coluna = %d\n", coordenadaLinha, coordanadaColuna); //Imprime as coordenadas da matriz
+            }
+        }
+
+        // Posicionamento diagonal decrescente (/) (navio4)
+        if (linhaNavio4 + 2 < 10 && colunaNavio4 - 2 >= 0) {
+            printf("\n===Coordenadas das partes do navio4===\n");
+            for (int i = 0; i < 3; i++) {
+                int coordenadaLinha = linhaNavio4 + i; //Armazena a coordenada das partes do barco nas linhas da matriz
+                int coordanadaColuna = colunaNavio4 - i; //Armazena a coordenada das partes do barco nas colunas da matriz
+                tabuleiro[linhaNavio4 + i][colunaNavio4 - i] = navio4[i]; //Posiciona o navio4 na diagonal decrescente
+                printf("Coordenadas: linha = %d - Coluna = %d\n", coordenadaLinha, coordanadaColuna); //Imprime as coordenadas da matriz
+            }
+        }   
+    }
+}
+int main()
+{
+    // Declaração da matriz 10x10 que irá representar o tabuleiro
+    int tabuleiro[10][10];
 
     // Declaração do vetor que será utilizado como referêcia de coluna no tabuleiro
     char letras[11] = {' ','A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
@@ -26,19 +95,7 @@ int main()
         }
     }
 
-    // Posicionamento do navio1 no tabuleiro horizontalmente.
-    int linhaNavio1 = 6;
-    int colunaNavio1 = 3;
-    for (int i = 0; i < 3; i++){                                          
-        tabuleiro[linhaNavio1][colunaNavio1 + i] = navio1[i]; // Posiciona horizontalmente
-    }
-
-     // Posicionamento do navio2 no tabuleiro verticalmente.
-     int linhaNavio2 = 2;
-     int colunaNavio2 = 3;
-     for (int i = 0; i < 3; i++){                                          
-        tabuleiro[linhaNavio2 + i][colunaNavio2] = navio2[i]; // Posiciona verticalmente
-     }
+    posicionarNavios(tabuleiro);
 
     // Emprimindo as letras para fácil identifcação das colunas
     printf("\n======TABULEIRO BATALHA NAVAL======\n");
@@ -56,11 +113,6 @@ int main()
         printf("\n");
     }
 
-
-    // Nível Aventureiro - Expansão do Tabuleiro e Posicionamento Diagonal
-    // Sugestão: Expanda o tabuleiro para uma matriz 10x10.
-    // Sugestão: Posicione quatro navios no tabuleiro, incluindo dois na diagonal.
-    // Sugestão: Exiba o tabuleiro completo no console, mostrando 0 para posições vazias e 3 para posições ocupadas.
 
     // Nível Mestre - Habilidades Especiais com Matrizes
     // Sugestão: Crie matrizes para representar habilidades especiais como cone, cruz, e octaedro.
