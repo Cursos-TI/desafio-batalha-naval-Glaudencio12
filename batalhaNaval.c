@@ -1,9 +1,5 @@
 #include <stdio.h>
 
-// Desafio Batalha Naval - MateCheck
-// Este código inicial serve como base para o desenvolvimento do sistema de Batalha Naval.
-// Siga os comentários para implementar cada parte do desafio
-
 void posicionarNavios(int tabuleiro[10][10]){
     // Declaração do vetores que representam os dois navios
     int navio1[3] = {3, 3, 3};
@@ -14,7 +10,7 @@ void posicionarNavios(int tabuleiro[10][10]){
     // Posicionamento inicial dos navios
     int linhaNavio1 = 8, colunaNavio1 = 7; // Horizontal (---)
     int linhaNavio2 = 2, colunaNavio2 = 2; // Vertical (|)
-    int linhaNavio3 = 0, colunaNavio3 = 4; // Diagonal crescente (\)
+    int linhaNavio3 = 5, colunaNavio3 = 0; // Diagonal crescente (\)
     int linhaNavio4 = 7, colunaNavio4 = 4; // Diagonal decrescente (/)
 
     int sobreposicao = 0;
@@ -78,10 +74,81 @@ void posicionarNavios(int tabuleiro[10][10]){
         }   
     }
 }
+
+void matrizesHabilidades(int matrizCone[3][5], int matrizCruz[3][5], int matrizOctaedro[3][5] ){
+    int pontoOrigemCone = 2; // Define a posição inicial da habilidade em cone 
+
+    //Percorre a matriz da habilidade em cone
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 5; j++) {
+            // Última linha da matriz: todos os valores são 1 (base do cone)
+            if (i == 2) {  
+                matrizCone[i][j] = 1;
+            } 
+            // Primeira linha: um único 1 na posição de origem do cone
+            else if (i == 0 && j == pontoOrigemCone) { 
+                matrizCone[i][j] = 1;
+            }
+            // Segunda linha: um intervalo de 3 colunas que formando o tronco do cone
+            else if (i == 1 && j >= pontoOrigemCone && j <= 3) { 
+                matrizCone[i][j] = 1;
+            } 
+        }
+        // Decrementa a posição para expandir o cone na próxima iteração
+        pontoOrigemCone--;
+    }
+
+    // Construção da matriz no formato de cruz
+    for (int i = 0; i < 3; i++){
+        for (int j = 0; j < 5; j++){
+            // Centro da cruz
+            if (i == 1 && j == 2){
+                matrizCruz[i][j] = 1;
+            }
+            // Linha vertical da cruz
+            else if(j == 2 && i != 1){
+                matrizCruz[i][j] = 1;
+            }
+            // Linha horizontal da cruz
+            else if(i == 1 && (j < 2 || j > 2)){
+                matrizCruz[i][j] = 1;
+            }
+        }
+    }
+    
+    // Construção da matriz no formato de octaedro
+    for (int i = 0; i < 3; i++){
+        for (int j = 0; j < 5; j++){
+            // Linha do meio do octaedro, excluindo as bordas laterais
+            if(i == 1 && ((j <= 2 && j != 0) || (j >= 2 && j != 4))){
+                matrizOctaedro[i][j] = 1;
+            }
+            // Coluna do meio do octaedro
+            else if(j == 2 && i != 1){
+                matrizOctaedro[i][j] = 1;
+            }
+        }
+    }
+}
+
+//Função que insere as matrizes de habilidades dentro da matriz tabuleiro
+void inserirMatrizesNoTabuleiro(int matriz[3][5], int tabuleiro[10][10], int linhaInicial, int colunaInicial){
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 5; j++) {
+            tabuleiro[linhaInicial + i][colunaInicial + j] = matriz[i][j];
+        }
+    }
+}
+
 int main()
 {
     // Declaração da matriz 10x10 que irá representar o tabuleiro
     int tabuleiro[10][10];
+
+    // Declaração das matrizes de habilidades já preenchidas com 0
+    int matrizCone[3][5] = {0};
+    int matrizCruz[3][5] = {0};
+    int matrizOctaedro[3][5] = {0};
 
     // Declaração do vetor que será utilizado como referêcia de coluna no tabuleiro
     char letras[11] = {' ','A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
@@ -94,6 +161,10 @@ int main()
             tabuleiro[i][j] = 0; 
         }
     }
+    matrizesHabilidades(matrizCone, matrizCruz, matrizOctaedro);
+    inserirMatrizesNoTabuleiro(matrizCone, tabuleiro, 5, 5);
+    inserirMatrizesNoTabuleiro(matrizCruz, tabuleiro, 0, 4);
+    inserirMatrizesNoTabuleiro(matrizOctaedro, tabuleiro, 3, 2);
 
     posicionarNavios(tabuleiro);
 
@@ -106,34 +177,12 @@ int main()
     
     // Imprimindo o tabuleiro no console
     for (int i = 0; i < 10; i++){
-        printf("%d | ", linhas[i]); //Emprime números em cada linha para fácil a indentificação
+        printf("%d | ", linhas[i]); //Emprime números em cada linha para fácilitar a indentificação
         for (int j = 0; j < 10; j++){
             printf("%d  ", tabuleiro[i][j]);
         }
         printf("\n");
     }
-
-
-    // Nível Mestre - Habilidades Especiais com Matrizes
-    // Sugestão: Crie matrizes para representar habilidades especiais como cone, cruz, e octaedro.
-    // Sugestão: Utilize estruturas de repetição aninhadas para preencher as áreas afetadas por essas habilidades no tabuleiro.
-    // Sugestão: Exiba o tabuleiro com as áreas afetadas, utilizando 0 para áreas não afetadas e 1 para áreas atingidas.
-
-    // Exemplos de exibição das habilidades:
-    // Exemplo para habilidade em cone:
-    // 0 0 1 0 0
-    // 0 1 1 1 0
-    // 1 1 1 1 1
-
-    // Exemplo para habilidade em octaedro:
-    // 0 0 1 0 0
-    // 0 1 1 1 0
-    // 0 0 1 0 0
-
-    // Exemplo para habilidade em cruz:
-    // 0 0 1 0 0
-    // 1 1 1 1 1
-    // 0 0 1 0 0
 
     return 0;
 }
